@@ -1,0 +1,97 @@
+﻿<fluentWpf:AcrylicWindow x:Class="NameAnonymizer.MainWindow"
+                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                         xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+                         xmlns:nameAnonymizer="clr-namespace:NameAnonymizer"
+                         mc:Ignorable="d"
+                         Title="MainWindow" Height="800" Width="1024"
+                         fluentWpf:PointerTracker.Enabled="True" MouseDown="MainWindowMouseDown"
+                         d:DataContext="{d:DesignInstance nameAnonymizer:MainWindow}">
+    <fluentWpf:AcrylicWindow.Resources>
+
+    </fluentWpf:AcrylicWindow.Resources>
+    <Grid IsEnabled="{Binding IsNotLoading}">
+        <Grid Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Choose root folder:" />
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+
+                    <TextBox HorizontalAlignment="Left" Text="{Binding RootDir}" Width="400" Margin="5,5,0,5"
+                             IsReadOnly="True" />
+                    <Button Content="Browse" Margin="0,5,5,5" Click="BtnBrowseClick" />
+                </StackPanel>
+
+                <Label Grid.Row="0" Grid.Column="2" Content="Search pattern:" />
+                <TextBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Text="{Binding SearchPattern}"
+                         Margin="5,5,0,5" />
+
+                <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal">
+                    <Button Content="Analyze" Margin="0,5,5,5" Click="BtnAnalyzeClick" />
+                    <Button Content="Export" Margin="0,5,5,5" Click="BtnExportClick" />
+                </StackPanel>
+
+                <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" />
+
+                <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Column="0" ItemsSource="{Binding FoundPlayers}" SelectionMode="Single"
+                             SelectedItem="{Binding SelectedPlayer}" DisplayMemberPath="Original" />
+                    
+                    <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="Transparent" />
+
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="Original:" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPlayer.Original}" IsReadOnly="True" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="Replace with:" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedPlayer.Replaced}" />
+
+                        <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding SelectedPlayer.Lines}" />
+
+                    </Grid>
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Background="#99000000"
+              Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Content="Loading..." HorizontalAlignment="Center" VerticalAlignment="Center"
+                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FFF"
+                   FontSize="20" Height="Auto" />
+        </Grid>
+    </Grid>
+</fluentWpf:AcrylicWindow>
