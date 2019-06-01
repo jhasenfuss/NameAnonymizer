@@ -135,9 +135,11 @@ namespace NameAnonymizer
             if (_searcher != null) AnalyzeRoot();
         }
 
-        private void BtnExportClick(object sender, RoutedEventArgs e)
+        private async void BtnExportClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            IsLoading = true;
+            await _searcher.ReplacePlayers();
+            IsLoading = false;
         }
     }
 }

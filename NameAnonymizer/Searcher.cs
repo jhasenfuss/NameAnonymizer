@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -66,6 +67,14 @@ namespace NameAnonymizer
                 AnalyzedPlayers.ForEach(d => d.Replaced = "Player" + pi++.ToString("D4"));
 
                 return AnalyzedPlayers;
+            });
+        }
+
+        public Task ReplacePlayers()
+        {
+            return Task.Run(() =>
+            {
+
             });
         }
     }
