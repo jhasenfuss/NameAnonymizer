@@ -7,7 +7,7 @@
                          xmlns:nameAnonymizer="clr-namespace:NameAnonymizer"
                          mc:Ignorable="d"
                          Title="MainWindow" Height="800" Width="1024"
-                         fluentWpf:PointerTracker.Enabled="True" MouseDown="MainWindowMouseDown"
+                         fluentWpf:PointerTracker.Enabled="{Binding IsNotLoading}" MouseDown="MainWindowMouseDown"
                          d:DataContext="{d:DesignInstance nameAnonymizer:MainWindow}">
     <fluentWpf:AcrylicWindow.Resources>
 
@@ -57,7 +57,7 @@
 
                     <ListBox Grid.Column="0" ItemsSource="{Binding FoundPlayers}" SelectionMode="Single"
                              SelectedItem="{Binding SelectedPlayer}" DisplayMemberPath="Original" />
-                    
+
                     <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" Background="Transparent" />
 
                     <Grid Grid.Column="2">

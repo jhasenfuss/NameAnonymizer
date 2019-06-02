@@ -137,8 +137,12 @@ namespace NameAnonymizer
 
         private async void BtnExportClick(object sender, RoutedEventArgs e)
         {
+            var dlg = new FolderBrowserDialog();
+            if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+
             IsLoading = true;
-            await _searcher.ReplacePlayers();
+            await _searcher.ReplacePlayers(dlg.SelectedPath);
             IsLoading = false;
         }
     }
