@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define NameAnonymizer_TargetDir=$(var.NameAnonymizer.TargetDir)?>
+  <Product Id="{6420B37E-60EB-4777-BEA5-5480AD9C76DC}" Name="NameAnonymizer.Setup" Language="1033" Version="1.0.0.0"
+           Manufacturer="Jonathan Hasenfuss" UpgradeCode="8287ab2e-2e3f-434b-be18-a467d9127deb">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of NameAnonymizer is already installed." />
+    <MediaTemplate />
+
+    <Feature Id="ProductFeature" Title="NameAnonymizer" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="DesktopFolder" Name="Desktop">
+        <Component Id="ApplicationShortcutDesktop" Guid="{0E53B56D-70A5-427A-8624-5A2C16FF6A82}">
+          <Shortcut Id="ApplicationDesktopShortcut"
+                    Name="NameAnonymizer"
+                    Description="Anonymize chat dialogs"
+                    Target="[INSTALLFOLDER]NameAnonymizer.exe"
+                    WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="DesktopFolder" On="uninstall" />
+          <RegistryValue Root="HKCU" Key="Software\JHasenfuss\NameAnonymizerDesktop" Name="installed" Type="integer" Value="1"
+                         KeyPath="yes" />
+        </Component>
+      </Directory>
+
+
+      <Directory Id="ProgramMenuFolder">
+        <Component Id="ApplicationShortcutStartMenu" Guid="{B080FFC1-A744-4479-8943-7A70FBEC9FEF}">
+          <Shortcut Id="ApplicationStartMenuShortcut"
+                    Name="NameAnonymizer"
+                    Description="Anonymize chat dialogs"
+                    Target="[INSTALLFOLDER]NameAnonymizer.exe"
+                    WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="StartMenuFolder" On="uninstall" />
+          <RegistryValue Root="HKCU" Key="Software\JHasenfuss\NameAnonymizerStartMenu" Name="installed" Type="integer" Value="1"
+                         KeyPath="yes" />
+        </Component>
+      </Directory>
+
+
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ManufacturerFolder" Name="JHasenfuss">
+          <Directory Id="INSTALLFOLDER" Name="NameAnonymizer" />
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+      <!-- <Component Id="ProductComponent"> -->
+      <!-- TODO: Insert files, registry keys, and other resources here. -->
+      <!-- </Component> -->
+      <Component Id="NameAnonymizer.exe" Guid="f71a0ecd-c7c3-4ff3-b2b9-722599727613">
+        <File Id="NameAnonymizer.exe" Name="NameAnonymizer.exe"
+              Source="$(var.NameAnonymizer_TargetDir)NameAnonymizer.exe" />
+      </Component>
+      <Component Id="NameAnonymizer.exe.config" Guid="bed525e4-242e-40ca-8b24-c817dcb6ecf9">
+        <File Id="NameAnonymizer.exe.config" Name="NameAnonymizer.exe.config"
+              Source="$(var.NameAnonymizer_TargetDir)NameAnonymizer.exe.config" />
+      </Component>
+      <Component Id="FluentWPF.dll" Guid="2ec71585-840c-4ee8-86a6-d4028dc9658c">
+        <File Id="FluentWPF.dll" Name="FluentWPF.dll" Source="$(var.NameAnonymizer_TargetDir)FluentWPF.dll" />
+      </Component>
+
+      <ComponentRef Id="ApplicationShortcutDesktop" />
+      <ComponentRef Id="ApplicationShortcutStartMenu" />
+    </ComponentGroup>
+  </Fragment>
+</Wix>

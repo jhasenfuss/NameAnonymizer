@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace NameAnonymizer
@@ -17,8 +16,14 @@ namespace NameAnonymizer
             AnalyzedPlayers = new List<Player>();
         }
 
+        public bool ReplaceWholeLine { get; set; }
+
+        public bool RemoveEmptyLine { get; set; }
+
         private string RootDir { get; }
+
         private List<Player> AnalyzedPlayers { get; set; }
+
         public static string RegEx { get; set; } = "^(from|to)?[^:]*";
 
         public Task<List<Player>> AnalyzePlayers()
@@ -40,7 +45,7 @@ namespace NameAnonymizer
                     foreach (var line in lines)
                     {
                         var match = regex.Match(line);
-                        if (!match.Success) continue;
+                        if (!match.Success || string.IsNullOrEmpty(match.Value)) continue;
 
                         var player = AnalyzedPlayers.FirstOrDefault(d => d.Original == match.Value);
 
@@ -76,14 +81,8 @@ namespace NameAnonymizer
             return Task.Run(() =>
             {
                 var destInfo = new DirectoryInfo(dest);
-                foreach (var file in destInfo.GetFiles())
-                {
-                    file.Delete();
-                }
-                foreach (var dir in destInfo.GetDirectories())
-                {
-                    dir.Delete(true);
-                }
+                foreach (var file in destInfo.GetFiles()) file.Delete();
+                foreach (var dir in destInfo.GetDirectories()) dir.Delete(true);
 
                 var regex = new Regex(RegEx, RegexOptions.IgnoreCase | RegexOptions.Multiline);
                 var rootInfo = new DirectoryInfo(RootDir);
@@ -93,25 +92,34 @@ namespace NameAnonymizer
                 foreach (var file in files)
                 {
                     var newName = dest + file.FullName.Replace(RootDir, "");
-                    Directory.CreateDirectory(Path.GetDirectoryName(newName));
-                    using (File.Create(newName)) { }
+                    Directory.CreateDirectory(Path.GetDirectoryName(newName) ?? "");
+                    using (File.Create(newName))
+                    {
+                    }
 
                     var lines = File.ReadAllLines(file.FullName, Encoding.GetEncoding("Windows-1252"));
 
                     foreach (var line in lines)
                     {
                         var txt = line;
-                        var match = regex.Match(txt);
 
-                        if (match.Success)
+                        if (RemoveEmptyLine && string.IsNullOrEmpty(line)) continue;
+
+                        if (ReplaceWholeLine)
                         {
-                            var player = AnalyzedPlayers.FirstOrDefault(d => d.Original == match.Value);
+                            foreach (var analyzedPlayer in AnalyzedPlayers)
+                                txt = txt.Replace(analyzedPlayer.Original, analyzedPlayer.Replaced);
+                        }
+                        else
+                        {
+                            var match = regex.Match(txt);
 
-                            if (player != null)
+                            if (match.Success)
                             {
-                                txt = regex.Replace(txt, player.Replaced);
-                            }
+                                var player = AnalyzedPlayers.FirstOrDefault(d => d.Original == match.Value);
 
+                                if (player != null) txt = regex.Replace(txt, player.Replaced);
+                            }
                         }
 
                         File.AppendAllText(newName, txt + Environment.NewLine);

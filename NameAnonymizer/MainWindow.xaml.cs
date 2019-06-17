@@ -142,6 +142,8 @@ namespace NameAnonymizer
                 return;
 
             IsLoading = true;
+            _searcher.ReplaceWholeLine = true;
+            _searcher.RemoveEmptyLine = true;
             await _searcher.ReplacePlayers(dlg.SelectedPath);
             IsLoading = false;
         }
