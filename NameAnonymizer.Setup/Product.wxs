@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define NameAnonymizer_TargetDir=$(var.NameAnonymizer.TargetDir)?>
-  <Product Id="{6420B37E-60EB-4777-BEA5-5480AD9C76DC}" Name="NameAnonymizer.Setup" Language="1033" Version="1.0.0.0"
+  <Product Id="*" Name="NameAnonymizer.Setup" Language="1033" Version="1.1.0.0"
            Manufacturer="Jonathan Hasenfuss" UpgradeCode="8287ab2e-2e3f-434b-be18-a467d9127deb">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 

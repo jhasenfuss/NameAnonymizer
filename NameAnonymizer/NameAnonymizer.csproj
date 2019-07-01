@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="Player.cs" />
     <Compile Include="Searcher.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="TextLine.cs" />
     <Compile Include="ThemeSwitcher.cs" />
     <Page Include="MainWindow.xaml">

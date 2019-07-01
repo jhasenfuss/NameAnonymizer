@@ -17,15 +17,17 @@ namespace NameAnonymizer
     /// </summary>
     public sealed partial class MainWindow : INotifyPropertyChanged
     {
+        private bool _displaySettings;
         private List<Player> _foundPlayers;
         private bool _isLoading;
         private string _rootDir;
-
         private Searcher _searcher;
         private Player _selectedPlayer;
 
         public MainWindow()
         {
+            Settings = new Settings();
+
             var themeSwitcher = new ThemeSwitcher();
 
             themeSwitcher.OnThemeChanged += SwitchTheme;
@@ -34,6 +36,8 @@ namespace NameAnonymizer
             InitializeComponent();
             DataContext = this;
         }
+
+        public Settings Settings { get; }
 
         public string RootDir
         {
@@ -58,13 +62,13 @@ namespace NameAnonymizer
             }
         }
 
-        public string SearchPattern
+        public bool DisplaySettings
         {
-            get => Searcher.RegEx;
+            get => _displaySettings;
             set
             {
-                if (value == Searcher.RegEx) return;
-                Searcher.RegEx = value;
+                if (value == _displaySettings) return;
+                _displaySettings = value;
                 OnPropertyChanged();
             }
         }
@@ -109,7 +113,7 @@ namespace NameAnonymizer
             if (string.IsNullOrEmpty(dlg.SelectedPath)) return;
 
             RootDir = dlg.SelectedPath;
-            _searcher = new Searcher(RootDir);
+            _searcher = new Searcher(Settings, RootDir);
         }
 
         private async void AnalyzeRoot()
@@ -146,6 +150,11 @@ namespace NameAnonymizer
             _searcher.RemoveEmptyLine = true;
             await _searcher.ReplacePlayers(dlg.SelectedPath);
             IsLoading = false;
+        }
+
+        private void BtnToggleDisplaySettingsClick(object sender, RoutedEventArgs e)
+        {
+            DisplaySettings = !DisplaySettings;
         }
     }
 }

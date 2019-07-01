@@ -37,11 +37,8 @@
                     <Button Content="Browse" Margin="0,5,5,5" Click="BtnBrowseClick" />
                 </StackPanel>
 
-                <Label Grid.Row="0" Grid.Column="2" Content="Search pattern:" />
-                <TextBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Text="{Binding SearchPattern}"
-                         Margin="5,5,0,5" />
-
                 <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal">
+                    <Button Content="Settings" Margin="0,5,50,5" Click="BtnToggleDisplaySettingsClick" />
                     <Button Content="Analyze" Margin="0,5,5,5" Click="BtnAnalyzeClick" />
                     <Button Content="Export" Margin="0,5,5,5" Click="BtnExportClick" />
                 </StackPanel>
@@ -72,7 +69,8 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Grid.Row="0" Grid.Column="0" Content="Original:" />
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPlayer.Original}" IsReadOnly="True" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPlayer.Original}"
+                                 IsReadOnly="True" />
 
                         <Label Grid.Row="1" Grid.Column="0" Content="Replace with:" />
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedPlayer.Replaced}" />
@@ -92,6 +90,39 @@
             <Label Content="Loading..." HorizontalAlignment="Center" VerticalAlignment="Center"
                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FFF"
                    FontSize="20" Height="Auto" />
+        </Grid>
+
+        <Grid Background="#99000000"
+              Visibility="{Binding DisplaySettings, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="{DynamicResource BgColor}">
+                <Grid Margin="25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="15" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="15" />
+                        <RowDefinition />
+                        <RowDefinition Height="25" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="Search pattern:" />
+                    <TextBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Text="{Binding Settings.RegEx}"
+                             Margin="5,5,0,5" />
+
+                    <Label Grid.Row="2" Grid.Column="0" Content="Leading zero player names:" />
+                    <TextBox Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left" Text="{Binding Settings.LeadingZero}"
+                             Margin="5,5,0,5" />
+
+                    <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Right" Content="Save" Click="BtnToggleDisplaySettingsClick"></Button>
+                </Grid>
+
+            </Grid>
+
         </Grid>
     </Grid>
 </fluentWpf:AcrylicWindow>
