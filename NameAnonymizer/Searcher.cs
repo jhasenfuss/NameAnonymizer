@@ -10,8 +10,9 @@ namespace NameAnonymizer
 {
     internal class Searcher
     {
-        public Searcher(string rootDir)
+        public Searcher(Settings settings, string rootDir)
         {
+            Settings = settings;
             RootDir = rootDir;
             AnalyzedPlayers = new List<Player>();
         }
@@ -21,6 +22,8 @@ namespace NameAnonymizer
         public bool RemoveEmptyLine { get; set; }
 
         private string RootDir { get; }
+
+        private Settings Settings { get; }
 
         private List<Player> AnalyzedPlayers { get; set; }
 
@@ -70,7 +73,7 @@ namespace NameAnonymizer
 
                 AnalyzedPlayers = AnalyzedPlayers.OrderBy(d => d.Original).ToList();
                 var pi = 1;
-                AnalyzedPlayers.ForEach(d => d.Replaced = "Player" + pi++.ToString("D4"));
+                AnalyzedPlayers.ForEach(d => d.Replaced = "Player" + pi++.ToString("D" + Settings.LeadingZero));
 
                 return AnalyzedPlayers;
             });
