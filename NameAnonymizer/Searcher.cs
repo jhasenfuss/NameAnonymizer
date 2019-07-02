@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace NameAnonymizer
 {
-    internal class Searcher
+    public class Searcher
     {
+        public Searcher()
+        {
+            
+        }
+
         public Searcher(Settings settings, string rootDir)
         {
             Settings = settings;
@@ -21,11 +26,11 @@ namespace NameAnonymizer
 
         public bool RemoveEmptyLine { get; set; }
 
-        private string RootDir { get; }
+        public string RootDir { get; set; }
 
-        private Settings Settings { get; }
+        public Settings Settings { get; set; }
 
-        private List<Player> AnalyzedPlayers { get; set; }
+        public List<Player> AnalyzedPlayers { get; set; }
 
         public static string RegEx { get; set; } = "^(from|to)?[^:]*";
 
@@ -83,6 +88,8 @@ namespace NameAnonymizer
         {
             return Task.Run(() =>
             {
+                var sortedPlayers = AnalyzedPlayers.OrderByDescending(d => d.Original.Length).ThenBy(d => d.Original).ToList();
+
                 var destInfo = new DirectoryInfo(dest);
                 foreach (var file in destInfo.GetFiles()) file.Delete();
                 foreach (var dir in destInfo.GetDirectories()) dir.Delete(true);
@@ -110,7 +117,7 @@ namespace NameAnonymizer
 
                         if (ReplaceWholeLine)
                         {
-                            foreach (var analyzedPlayer in AnalyzedPlayers)
+                            foreach (var analyzedPlayer in sortedPlayers)
                                 txt = txt.Replace(analyzedPlayer.Original, analyzedPlayer.Replaced);
                         }
                         else
@@ -119,7 +126,7 @@ namespace NameAnonymizer
 
                             if (match.Success)
                             {
-                                var player = AnalyzedPlayers.FirstOrDefault(d => d.Original == match.Value);
+                                var player = sortedPlayers.FirstOrDefault(d => d.Original == match.Value);
 
                                 if (player != null) txt = regex.Replace(txt, player.Replaced);
                             }
