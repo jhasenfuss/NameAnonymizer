@@ -1,3 +1,9 @@
+<!--
+  Title: Name Anonymizer
+  Description: A simple program to anonymize chat logs.
+  Author: Jonathan Hasenfuß (jhasenfuss)
+-->
+
 # NameAnonymizer
 
 ## Overview
